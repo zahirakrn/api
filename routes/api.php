@@ -8,31 +8,38 @@ use App\Http\Controllers\Api\PemainController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+ */
 
-// Route Liga Manual/Kupling/Gigi
-// Route::get('liga', [LigaController::class, 'index']); //data keseluruhan
-// Route::post('liga', [LigaController::class, 'store']); //menambahkan data
-// Route::get('liga/{id}', [LigaController::class, 'show']); //menampilkan berdasarkan id
-// Route::put('liga/{id}', [LigaController::class, 'update']); //mengedit liga
-// Route::delete('liga/{id}', [LigaController::class, 'destroy']); //menghapus liga
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+// Route::get('liga', [LigaController::class, 'index']);
+// Route::post('liga', [LigaController::class, 'store']);
+// Route::get('liga/{id}', [LigaController::class, 'show']);
+// Route::put('liga/{id}', [LigaController::class, 'update']);
+// Route::delete('liga/{id}', [LigaController::class, 'destroy']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
-
-    // Route Liga Matic
-    Route::resource('liga', LigaController::class)->except('create', 'edit');
-    // Route Liga Matic
-    Route::resource('klub', KlubController::class)->except('create', 'edit');
-    // Route Pemain Matic
-    Route::resource('pemain', PemainController::class)->except('create', 'edit');
-    // Route Pemain Matic
-    Route::resource('fan', FanController::class)->except('create', 'edit');
+    // controller lainnya yang kemarin sudah dibuat simpan dibawah
+    Route::resource('liga', LigaController::class)->except(['edit', 'create']);
+    Route::resource('klub', KlubController::class)->except(['edit', 'create']);
+    Route::resource('pemain', PemainController::class)->except(['edit', 'create']);
+    Route::resource('fan', FanController::class)->except(['edit', 'create']);
 });
 
-//Auth Route
+// auth Route
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
- 
+
+

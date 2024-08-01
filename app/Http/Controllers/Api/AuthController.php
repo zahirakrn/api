@@ -4,23 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Auth;
-use Hash;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+        $validate = Validator::make($request->all(), [
+            'name' => 'required',
             'email' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
+        if ($validate->fails()) {
+            return response()->json($validate->errors());
         }
 
         $user = User::create([
@@ -59,8 +59,7 @@ class AuthController extends Controller
     {
         Auth::user()->tokens()->delete();
         return response()->json([
-            'message' => 'logout success',
+            'message' => 'Logout success',
         ]);
     }
 }
-
